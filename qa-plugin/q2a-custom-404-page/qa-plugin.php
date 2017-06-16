@@ -13,7 +13,7 @@
 	Plugin Update Check URI: https://raw.githubusercontent.com/ProThoughts/q2a-custom-404-page/master/qa-plugin.php
 */
 
-if (!defined('QA_VERSION')) 
+if (!defined('QA_VERSION'))
 { // don't allow this page to be requested directly from browser
 	header('Location: ../../');
 	exit;
