@@ -1,12 +1,13 @@
 <?php
+
 class pt_qa_simple_admanager
 {
-	function allow_template($template)
+	public function allow_template($template)
 	{
 		return ($template != 'admin');
 	}
 
-	function admin_form(&$qa_content)
+	public function admin_form(&$qa_content)
 	{
 		$ok = null;
 		if (qa_clicked('pt_q2a_simple_ads_manager_save_button'))
