@@ -20,5 +20,3 @@ if (!defined('QA_VERSION'))
 
 qa_register_plugin_layer('qa-admanager-layer.php', 'Simple Ads Manager');
 qa_register_plugin_module('module', 'qa-admanager-options.php', 'pt_qa_simple_admanager', 'Simple Ads Manager Options');
-
-
