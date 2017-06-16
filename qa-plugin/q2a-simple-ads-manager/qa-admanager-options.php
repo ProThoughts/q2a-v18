@@ -21,17 +21,17 @@ class pt_qa_simple_admanager {
 			qa_opt('pt_q2a_ad_after_menu_bar_codebox', qa_post_text('pt_q2a_ad_after_menu_bar_code_field'));   
 			
 			qa_opt('pt_q2a_ad_after_all_answers',(bool)qa_post_text('pt_q2a_ad_after_all_answers'));
-			qa_opt('pt_q2a_ad_after_all_answers_codebox', qa_post_text('pt_q2a_ad_after_all_answers_code_field'));   
+			qa_opt('pt_q2a_ad_after_all_answers_codebox', qa_post_text('pt_q2a_ad_after_all_answers_code_field'));	 
 			
 			qa_opt('pt_q2a_ad_after_all_questions',(bool)qa_post_text('pt_q2a_ad_after_all_questions'));
-			qa_opt('pt_q2a_ad_after_all_questions_codebox', qa_post_text('pt_q2a_ad_after_all_questions_code_field'));   
+			qa_opt('pt_q2a_ad_after_all_questions_codebox', qa_post_text('pt_q2a_ad_after_all_questions_code_field'));	 
 			
 			qa_opt('pt_q2a_ad_sidebar',(bool)qa_post_text('pt_q2a_ad_sidebar'));
-			qa_opt('pt_q2a_ad_sidebar_codebox', qa_post_text('pt_q2a_ad_sidebar_code_field'));   
+			qa_opt('pt_q2a_ad_sidebar_codebox', qa_post_text('pt_q2a_ad_sidebar_code_field'));	 
 			
 			$ok = qa_lang('admin/options_saved');
 		}
-        
+		
 		qa_set_display_rules($qa_content, array(
 				
 			'pt_q2a_ad_after_question_code_display' => 'pt_q2a_ad_after_question',
@@ -57,7 +57,7 @@ class pt_qa_simple_admanager {
 			'type' => 'textarea',
 			'value' => qa_opt('pt_q2a_ad_after_question_codebox'),
 			'tags' => 'NAME="pt_q2a_ad_after_question_code_field"',
-            'rows' => 2,
+			'rows' => 2,
 		);
 
 		$fields[] = array(
@@ -73,7 +73,7 @@ class pt_qa_simple_admanager {
 			'type' => 'textarea',
 			'value' => qa_opt('pt_q2a_ad_after_menu_bar_codebox'),
 			'tags' => 'NAME="pt_q2a_ad_after_menu_bar_code_field"',
-            'rows' => 2,
+			'rows' => 2,
 		);		
 
 		$fields[] = array(
@@ -89,7 +89,7 @@ class pt_qa_simple_admanager {
 			'type' => 'textarea',
 			'value' => qa_opt('pt_q2a_ad_after_all_answers_codebox'),
 			'tags' => 'NAME="pt_q2a_ad_after_all_answers_code_field"',
-            'rows' => 2,
+			'rows' => 2,
 		);		
 		
 		$fields[] = array(
@@ -105,7 +105,7 @@ class pt_qa_simple_admanager {
 			'type' => 'textarea',
 			'value' => qa_opt('pt_q2a_ad_after_all_questions_codebox'),
 			'tags' => 'NAME="pt_q2a_ad_after_all_questions_code_field"',
-            'rows' => 2,
+			'rows' => 2,
 		);		
 		
 		$fields[] = array(
@@ -121,7 +121,7 @@ class pt_qa_simple_admanager {
 			'type' => 'textarea',
 			'value' => qa_opt('pt_q2a_ad_sidebar_codebox'),
 			'tags' => 'NAME="pt_q2a_ad_sidebar_code_field"',
-            'rows' => 2,
+			'rows' => 2,
 		);		
 
 		$fields[] = array(
