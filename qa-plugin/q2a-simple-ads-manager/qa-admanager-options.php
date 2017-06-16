@@ -1,17 +1,16 @@
 <?php
 class pt_qa_simple_admanager
-
-	{
+{
 	function allow_template($template)
-		{
+	{
 		return ($template != 'admin');
-		}
+	}
 
 	function admin_form(&$qa_content)
-		{
+	{
 		$ok = null;
 		if (qa_clicked('pt_q2a_simple_ads_manager_save_button'))
-			{
+		{
 			qa_opt('pt_q2a_ad_after_question', (bool)qa_post_text('pt_q2a_ad_after_question'));
 			qa_opt('pt_q2a_ad_after_question_codebox', qa_post_text('pt_q2a_ad_after_question_code_field'));
 			qa_opt('pt_q2a_ad_after_menu_bar', (bool)qa_post_text('pt_q2a_ad_after_menu_bar'));
@@ -23,7 +22,7 @@ class pt_qa_simple_admanager
 			qa_opt('pt_q2a_ad_sidebar', (bool)qa_post_text('pt_q2a_ad_sidebar'));
 			qa_opt('pt_q2a_ad_sidebar_codebox', qa_post_text('pt_q2a_ad_sidebar_code_field'));
 			$ok = qa_lang('admin/options_saved');
-			}
+		}
 
 		qa_set_display_rules($qa_content, array(
 			'pt_q2a_ad_after_question_code_display' => 'pt_q2a_ad_after_question',
@@ -116,8 +115,8 @@ class pt_qa_simple_admanager
 				)
 			)
 		);
-		}
 	}
+}
 
 /*
 Omit PHP closing tag to help avoid accidental output

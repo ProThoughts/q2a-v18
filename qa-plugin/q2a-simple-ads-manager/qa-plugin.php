@@ -13,11 +13,12 @@ Plugin Update Check URI: https://raw.githubusercontent.com/ProThoughts/q2a-simpl
 */
 
 if (!defined('QA_VERSION'))
-	{ // don't allow this page to be requested directly from browser
+{ // don't allow this page to be requested directly from browser
 	header('Location: ../../');
 	exit;
-	}
+}
 
 qa_register_plugin_layer('qa-admanager-layer.php', 'Simple Ads Manager');
 qa_register_plugin_module('module', 'qa-admanager-options.php', 'pt_qa_simple_admanager', 'Simple Ads Manager Options');
+
 ?>
