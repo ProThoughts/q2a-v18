@@ -2,12 +2,12 @@
 
 class qa_badge_admin
 {
-	function allow_template($template)
+	public function allow_template($template)
 	{
 		return ($template != 'admin');
 	}
 
-	function option_default($option)
+	public function option_default($option)
 	{
 		if (strpos($option, 'badge_email_notify_id_') === 0)
 		{
@@ -18,149 +18,146 @@ class qa_badge_admin
 		$slug = preg_replace('/badge_(.+)_[^_]+/', "$1", $option);
 		switch ($option)
 		{
-		case 'badge_' . $slug . '_name':
+			case 'badge_' . $slug . '_name':
+				// return qa_badge_name('badges/'.$slug);
+				return qa_lang('badges/' . $slug);
+			case 'badge_' . $slug . '_var':
+				return @$badges[$slug]['var'];
+			case 'badge_' . $slug . '_enabled':
+				return '0';
+			case 'badge_custom_badges':
+				return true;
+			case 'badge_notify_time':
+				return 0;
+			case 'badge_widget_list_max':
+				return 5;
+			case 'badge_widget_date_max':
+				return 30;
+			case 'badge_email_subject':
+				return '[^site_title] ';
+			case 'badge_email_body':
+				return 'Congratulations!  You have earned a "^badge_name" badge from ^site_title ^if_post_text="for the following post:
+						^post_title
+						^post_url"
 
-			// return qa_badge_name('badges/'.$slug);
+						Please log in and visit your profile:
 
-			return qa_lang('badges/' . $slug);
-		case 'badge_' . $slug . '_var':
-			return @$badges[$slug]['var'];
-		case 'badge_' . $slug . '_enabled':
-			return '0';
-		case 'badge_custom_badges':
-			return true;
-		case 'badge_notify_time':
-			return 0;
-		case 'badge_widget_list_max':
-			return 5;
-		case 'badge_widget_date_max':
-			return 30;
-		case 'badge_email_subject':
-			return '[^site_title] ';
-		case 'badge_email_body':
-			return 'Congratulations!  You have earned a "^badge_name" badge from ^site_title ^if_post_text="for the following post:
+						^profile_url
 
-^post_title
-^post_url"
+						You may cancel these notices at any time by visiting your profile at the link above.';
+			case 'badges_css':
+				return '.notify-container {
+						left: 0;
+						right: 0;
+						top: 0;
+						padding: 0;
+						position: fixed;
+						width: 100%;
+						z-index: 10000;
+					}
+					.badge-container-badge {
+						white-space: nowrap;
+					}
+					.badge-notify {
+						background-color: #F6DF30;
+						color: #444444;
+						font-weight: bold;
+						width: 100%;
+						text-align: center;
+						font-family: sans-serif;
+						font-size: 14px;
+						padding: 10px 0;
+						position:relative;
+					}
+					.notify-close {
+						color: #735005;
+						cursor: pointer;
+						font-size: 18px;
+						line-height: 18px;
+						padding: 0 3px;
+						position: absolute;
+						right: 8px;
+						text-decoration: none;
+						top: 8px;
+					}				
+					#badge-form td {
+						vertical-align:top;
+					}
+					.badge-bronze,.badge-silver, .badge-gold {
+						margin-right:4px;
+						color: #000;
+						font-weight:bold;
+						text-align:center;
+						border-radius:4px;
+						width:120px;
+						padding: 5px 10px;
+						display: inline-block;
+					}
+					.badge-bronze {
+						background-color: #CB9114;
 
-Please log in and visit your profile:
+						background-image: -webkit-linear-gradient(left center , #CB9114, #EDB336, #CB9114, #A97002, #CB9114); 
+						background-image:    -moz-linear-gradient(left center , #CB9114, #EDB336, #CB9114, #A97002, #CB9114);
+						background-image:     -ms-linear-gradient(left center , #CB9114, #EDB336, #CB9114, #A97002, #CB9114); 
+						background-image:      -o-linear-gradient(left center , #CB9114, #EDB336, #CB9114, #A97002, #CB9114); 
+						background-image:         linear-gradient(left center , #CB9114, #EDB336, #CB9114, #A97002, #CB9114); /* standard, but currently unimplemented */
 
-^profile_url
-
-You may cancel these notices at any time by visiting your profile at the link above.';
-		case 'badges_css':
-			return '.notify-container {
-	left: 0;
-	right: 0;
-	top: 0;
-	padding: 0;
-	position: fixed;
-	width: 100%;
-	z-index: 10000;
-}
-.badge-container-badge {
-	white-space: nowrap;
-}
-.badge-notify {
-	background-color: #F6DF30;
-	color: #444444;
-	font-weight: bold;
-	width: 100%;
-	text-align: center;
-	font-family: sans-serif;
-	font-size: 14px;
-	padding: 10px 0;
-	position:relative;
-}
-.notify-close {
-	color: #735005;
-	cursor: pointer;
-	font-size: 18px;
-	line-height: 18px;
-	padding: 0 3px;
-	position: absolute;
-	right: 8px;
-	text-decoration: none;
-	top: 8px;
-}				
-#badge-form td {
-	vertical-align:top;
-}
-.badge-bronze,.badge-silver, .badge-gold {
-	margin-right:4px;
-	color: #000;
-	font-weight:bold;
-	text-align:center;
-	border-radius:4px;
-	width:120px;
-	padding: 5px 10px;
-	display: inline-block;
-}
-.badge-bronze {
-	background-color: #CB9114;
-
-	background-image: -webkit-linear-gradient(left center , #CB9114, #EDB336, #CB9114, #A97002, #CB9114); 
-	background-image:    -moz-linear-gradient(left center , #CB9114, #EDB336, #CB9114, #A97002, #CB9114);
-	background-image:     -ms-linear-gradient(left center , #CB9114, #EDB336, #CB9114, #A97002, #CB9114); 
-	background-image:      -o-linear-gradient(left center , #CB9114, #EDB336, #CB9114, #A97002, #CB9114); 
-	background-image:         linear-gradient(left center , #CB9114, #EDB336, #CB9114, #A97002, #CB9114); /* standard, but currently unimplemented */
-
-	border:2px solid #6C582C;
-}				
-.badge-silver {
-	background-color: #CDCDCD;
-	background-image: -webkit-linear-gradient(left center , #CDCDCD, #EFEFEF, #CDCDCD, #ABABAB, #CDCDCD); 
-	background-image:    -moz-linear-gradient(left center , #CDCDCD, #EFEFEF, #CDCDCD, #ABABAB, #CDCDCD); 
-	background-image:     -ms-linear-gradient(left center , #CDCDCD, #EFEFEF, #CDCDCD, #ABABAB, #CDCDCD); 
-	background-image:      -o-linear-gradient(left center , #CDCDCD, #EFEFEF, #CDCDCD, #ABABAB, #CDCDCD); 
-	background-image:         linear-gradient(left center , #CDCDCD, #EFEFEF, #CDCDCD, #ABABAB, #CDCDCD); /* standard, but currently unimplemented */
-	border:2px solid #737373;
-}				
-.badge-gold {
-	background-color: #EEDD0F;
-	background-image: -webkit-linear-gradient(left center , #EEDD0F, #FFFF2F, #EEDD0F, #CCBB0D, #EEDD0F); 
-	background-image:    -moz-linear-gradient(left center , #EEDD0F, #FFFF2F, #EEDD0F, #CCBB0D, #EEDD0F); 
-	background-image:     -ms-linear-gradient(left center , #EEDD0F, #FFFF2F, #EEDD0F, #CCBB0D, #EEDD0F); 
-	background-image:      -o-linear-gradient(left center , #EEDD0F, #FFFF2F, #EEDD0F, #CCBB0D, #EEDD0F); 
-	background-image:         linear-gradient(left center , #EEDD0F, #FFFF2F, #EEDD0F, #CCBB0D, #EEDD0F); /* standard, but currently unimplemented */
-	border:2px solid #7E7B2A;
-}				
-.badge-bronze-medal, .badge-silver-medal, .badge-gold-medal  {
-	font-size: 14px;
-	font-family:sans-serif;
-}
-.badge-bronze-medal {
-	color: #CB9114;
-}				
-.badge-silver-medal {
-	color: #CDCDCD;
-}				
-.badge-gold-medal {
-	color: #EEDD0F;
-}
-.badge-pointer {
-	cursor:pointer;
-}				
-.badge-desc {
-	padding-left:8px;
-}			
-.badge-count {
-	font-weight:bold;
-}			
-.badge-count-link {
-	cursor:pointer;
-	color:#992828;
-}			
-.badge-source {
-	text-align:center;
-	padding:0;
-}
-.badge-widget-entry {
-	white-space:nowrap;
-}
-';
-		default:
-			return null;
+						border:2px solid #6C582C;
+					}				
+					.badge-silver {
+						background-color: #CDCDCD;
+						background-image: -webkit-linear-gradient(left center , #CDCDCD, #EFEFEF, #CDCDCD, #ABABAB, #CDCDCD); 
+						background-image:    -moz-linear-gradient(left center , #CDCDCD, #EFEFEF, #CDCDCD, #ABABAB, #CDCDCD); 
+						background-image:     -ms-linear-gradient(left center , #CDCDCD, #EFEFEF, #CDCDCD, #ABABAB, #CDCDCD); 
+						background-image:      -o-linear-gradient(left center , #CDCDCD, #EFEFEF, #CDCDCD, #ABABAB, #CDCDCD); 
+						background-image:         linear-gradient(left center , #CDCDCD, #EFEFEF, #CDCDCD, #ABABAB, #CDCDCD); /* standard, but currently unimplemented */
+						border:2px solid #737373;
+					}				
+					.badge-gold {
+						background-color: #EEDD0F;
+						background-image: -webkit-linear-gradient(left center , #EEDD0F, #FFFF2F, #EEDD0F, #CCBB0D, #EEDD0F); 
+						background-image:    -moz-linear-gradient(left center , #EEDD0F, #FFFF2F, #EEDD0F, #CCBB0D, #EEDD0F); 
+						background-image:     -ms-linear-gradient(left center , #EEDD0F, #FFFF2F, #EEDD0F, #CCBB0D, #EEDD0F); 
+						background-image:      -o-linear-gradient(left center , #EEDD0F, #FFFF2F, #EEDD0F, #CCBB0D, #EEDD0F); 
+						background-image:         linear-gradient(left center , #EEDD0F, #FFFF2F, #EEDD0F, #CCBB0D, #EEDD0F); /* standard, but currently unimplemented */
+						border:2px solid #7E7B2A;
+					}				
+					.badge-bronze-medal, .badge-silver-medal, .badge-gold-medal  {
+						font-size: 14px;
+						font-family:sans-serif;
+					}
+					.badge-bronze-medal {
+						color: #CB9114;
+					}				
+					.badge-silver-medal {
+						color: #CDCDCD;
+					}				
+					.badge-gold-medal {
+						color: #EEDD0F;
+					}
+					.badge-pointer {
+						cursor:pointer;
+					}				
+					.badge-desc {
+						padding-left:8px;
+					}			
+					.badge-count {
+						font-weight:bold;
+					}			
+					.badge-count-link {
+						cursor:pointer;
+						color:#992828;
+					}			
+					.badge-source {
+						text-align:center;
+						padding:0;
+					}
+					.badge-widget-entry {
+						white-space:nowrap;
+					}
+					';
+			default:
+				return null;
 		}
 	}
 
@@ -202,11 +199,11 @@ You may cancel these notices at any time by visiting your profile at the link ab
 
 			$ok = qa_lang('badges/badge_values_reset');
 		}
-		  else if (qa_clicked('badge_trigger_notify'))
+		else if (qa_clicked('badge_trigger_notify'))
 		{
 			$qa_content['test-notify'] = 1;
 		}
-		  else if (qa_clicked('badge_reset_css'))
+		else if (qa_clicked('badge_reset_css'))
 		{
 			qa_opt('badges_css', $this->option_default('badges_css'));
 			$ok = 'CSS Reset';
@@ -471,7 +468,7 @@ You may cancel these notices at any time by visiting your profile at the link ab
 
 	// imported user badge checking functions
 
-	function award_badge($object_id, $user_id, $badge_slug)
+	public function award_badge($object_id, $user_id, $badge_slug)
 	{
 
 		// add badge to userbadges
@@ -479,7 +476,7 @@ You may cancel these notices at any time by visiting your profile at the link ab
 		qa_db_query_sub('INSERT INTO ^userbadges (awarded_at, notify, object_id, user_id, badge_slug, id) ' . 'VALUES (NOW(), #, #, #, #, 0)', 0, $object_id, $user_id, $badge_slug);
 	}
 
-	function get_post_data($id)
+	public function get_post_data($id)
 	{
 		$result = qa_db_read_one_assoc(qa_db_query_sub('SELECT * FROM ^posts WHERE postid=#', $id) , true);
 		return $result;
@@ -487,7 +484,7 @@ You may cancel these notices at any time by visiting your profile at the link ab
 
 	// badge check
 
-	function qa_check_all_users_badges()
+	public function qa_check_all_users_badges()
 	{
 		$awarded = 0;
 		$users;
@@ -911,7 +908,6 @@ You may cancel these notices at any time by visiting your profile at the link ab
 		}
 
 		// rebuild badges from other plugins - experimental! - $module->custom_badges_rebuild() returns number of badges awarded.
-
 		$moduletypes = qa_list_module_types();
 		foreach($moduletypes as $moduletype)
 		{
@@ -927,7 +923,6 @@ You may cancel these notices at any time by visiting your profile at the link ab
 		}
 
 		// badges
-
 		$badges = array(
 			'medalist',
 			'champion',
@@ -942,18 +937,15 @@ You may cancel these notices at any time by visiting your profile at the link ab
 				$user = 'user' . $medal;
 
 				// get badge count
-
 				if (isset($users[$user]) && isset($users[$user]['medals'])) $users[$user]['medals']++;
 				  else $users[$user]['medals'] = 1;
 				unset($badgelist[$idx]);
 			}
-
 			foreach($users as $user => $data)
 			{
 				$uid = (int)substr($user, 4);
 
 				// check badges
-
 				if (isset($data['medals']))
 				{
 					$uid = (int)substr($user, 4);
@@ -964,13 +956,11 @@ You may cancel these notices at any time by visiting your profile at the link ab
 				unset($users[$user]);
 				}
 			}
-
 		// return ok text
-
 		return $awarded . ' badge' . ($awarded != 1 ? 's' : '') . ' awarded.';
 	}
 
-	function badge_activated($badges)
+	public function badge_activated($badges)
 	{
 		$c = 0;
 		foreach($badges as $slug)
