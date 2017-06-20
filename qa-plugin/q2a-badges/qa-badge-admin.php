@@ -605,13 +605,13 @@ class qa_badge_admin
 							// poll plugin integration
 							if ($pt == 'A' && qa_opt('poll_enable'))
 							{
-								$poll = qa_db_read_one_value(qa_db_query_sub('SELECT meta_value FROM ^postmeta WHERE post_id=# AND meta_key=$', $idv['id'], 'is_poll') , true);
+								$poll = qa_db_read_one_value(qa_db_query_sub('SELECT meta_value FROM ^postmeta WHERE post_id=# AND meta_key=$', $idv['id'], 'is_poll'), true);
 								if ($poll) continue;
 							}
 
 							if ((int)$idv['votes'] >= (int)qa_opt('badge_' . $badge_slug . '_var') && qa_opt('badge_' . $badge_slug . '_enabled') !== '0')
 							{
-								$result = qa_db_read_one_value(qa_db_query_sub('SELECT badge_slug FROM ^userbadges WHERE user_id=# AND object_id=# AND badge_slug=$', $uid, $idv['id'], $badge_slug) , true);
+								$result = qa_db_read_one_value(qa_db_query_sub('SELECT badge_slug FROM ^userbadges WHERE user_id=# AND object_id=# AND badge_slug=$', $uid, $idv['id'], $badge_slug), true);
 								if ($result == null)
 								{ // not already awarded this badge
 									$this->award_badge($idv['id'], $uid, $badge_slug, false, true);
@@ -630,7 +630,7 @@ class qa_badge_admin
 									$badge_slug2 = $badge_slug . '_old';
 									if ($diff >= (int)qa_opt('badge_' . $badge_slug2 . '_var') && qa_opt('badge_' . $badge_slug2 . '_enabled') !== '0')
 									{
-										$result = qa_db_read_one_value(qa_db_query_sub('SELECT badge_slug FROM ^userbadges WHERE user_id=# AND object_id=# AND badge_slug=$', $uid, $idv['id'], $badge_slug2) , true);
+										$result = qa_db_read_one_value(qa_db_query_sub('SELECT badge_slug FROM ^userbadges WHERE user_id=# AND object_id=# AND badge_slug=$', $uid, $idv['id'], $badge_slug2), true);
 										if ($result == null)
 										{ // not already awarded for this answer
 											$this->award_badge($idv['id'], $uid, $badge_slug2);
@@ -859,7 +859,7 @@ class qa_badge_admin
 				$userq = qa_db_query_sub('SELECT userid FROM ^users');
 				while (($userid = qa_db_read_one_value($userq, true)) !== null)
 				{
-					list($useraccount, $userprofile, $userfields) = qa_db_select_with_pending(qa_db_user_account_selectspec($userid, true) , qa_db_user_profile_selectspec($userid, true) , qa_db_userfields_selectspec());
+					list($useraccount, $userprofile, $userfields) = qa_db_select_with_pending(qa_db_user_account_selectspec($userid, true), qa_db_user_profile_selectspec($userid, true) , qa_db_userfields_selectspec());
 
 					// avatar badge
 
