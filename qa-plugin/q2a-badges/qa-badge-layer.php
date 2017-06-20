@@ -46,7 +46,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 			
 			$user = @qa_db_read_one_assoc(
 				qa_db_query_sub(
-					'SELECT ^achievements.user_id AS uid,^achievements.oldest_consec_visit AS ocv,^achievements.longest_consec_visit AS lcv,^achievements.total_days_visited AS tdv,^achievements.last_visit AS lv,^achievements.first_visit AS fv, ^userpoints.points as points FROM ^achievements, ^userpoints WHERE ^achievements.user_id=# AND ^userpoints.userid=#', 
+					'SELECT ^achievements.user_id AS uid,^achievements.oldest_consec_visit AS ocv,^achievements.longest_consec_visit AS lcv,^achievements.total_days_visited AS tdv,^achievements.last_visit AS lv,^achievements.first_visit AS fv, ^userpoints.points as points FROM ^achievements, ^userpoints WHERE ^achievements.user_id=# AND ^userpoints.userid=#',
 					$userid, $userid
 				),
 				true
@@ -55,7 +55,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 			if(!$user['uid'])
 			{
 				qa_db_query_sub(
-					'INSERT INTO ^achievements (user_id, first_visit, oldest_consec_visit, longest_consec_visit, last_visit, total_days_visited, questions_read, posts_edited) VALUES (#, NOW(), NOW(), #, NOW(), #, #, #) ON DUPLICATE KEY UPDATE first_visit=NOW(), oldest_consec_visit=NOW(), longest_consec_visit=#, last_visit=NOW(), total_days_visited=#, questions_read=#, posts_edited=#', 
+					'INSERT INTO ^achievements (user_id, first_visit, oldest_consec_visit, longest_consec_visit, last_visit, total_days_visited, questions_read, posts_edited) VALUES (#, NOW(), NOW(), #, NOW(), #, #, #) ON DUPLICATE KEY UPDATE first_visit=NOW(), oldest_consec_visit=NOW(), longest_consec_visit=#, last_visit=NOW(), total_days_visited=#, questions_read=#, posts_edited=#',
 					$userid, 1, 1, 0, 0, 1, 1, 0, 0
 				);
 				return;
@@ -87,19 +87,19 @@ class qa_html_theme_layer extends qa_html_theme_base
 				{
 					$user['lcv'] = $oldest_consec_diff;
 					qa_db_query_sub(
-						'UPDATE ^achievements SET last_visit=NOW(), longest_consec_visit=#, total_days_visited=total_days_visited+#  WHERE user_id=#', 
+						'UPDATE ^achievements SET last_visit=NOW(), longest_consec_visit=#, total_days_visited=total_days_visited+#  WHERE user_id=#',
 						$oldest_consec_diff, $last_diff, $userid
 					);
 				}
 				else
 				{
 					qa_db_query_sub(
-						'UPDATE ^achievements SET last_visit=NOW(), total_days_visited=total_days_visited+# WHERE user_id=#', 
+						'UPDATE ^achievements SET last_visit=NOW(), total_days_visited=total_days_visited+# WHERE user_id=#',
 						$last_diff, $userid
 					);
 				}
 				$badges = array('dedicated','devoted','zealous');
-				qa_badge_award_check($badges, $user['lcv'], $userid,null,2);
+				qa_badge_award_check($badges, $user['lcv'], $userid,null, 2);
 			}
 			else
 			{ // 2+ days, reset consecutive days due to lapse
@@ -110,10 +110,10 @@ class qa_html_theme_layer extends qa_html_theme_base
 			}
 
 			$badges = array('visitor','trouper','veteran');
-			qa_badge_award_check($badges, $user['tdv'], $userid,null,2);
+			qa_badge_award_check($badges, $user['tdv'], $userid, null, 2);
 			
 			$badges = array('regular','old_timer','ancestor');
-			qa_badge_award_check($badges, $first_visit_diff, $userid,null,2);
+			qa_badge_award_check($badges, $first_visit_diff, $userid, null, 2);
 			
 			// check points
 			if(isset($user['points']))
@@ -184,11 +184,11 @@ class qa_html_theme_layer extends qa_html_theme_base
 	public function main_parts($content)
 	{
 		if (qa_opt('badge_active') && $this->template == 'user' && qa_opt('badge_admin_user_field') && (qa_get('tab')=='badges' || qa_opt('badge_admin_user_field_no_tab')) && isset($content['raw']['userid']))
-		{ 
+		{
 			$userid = $content['raw']['userid'];
 			if(!qa_opt('badge_admin_user_field_no_tab'))
 				foreach($content as $i => $v)
-					if(strpos($i,'form') === 0)
+					if(strpos($i, 'form') === 0)
 						unset($content[$i]);
 			$content['form-badges-list'] = qa_badge_plugin_user_form($userid);
 		}
@@ -198,9 +198,9 @@ class qa_html_theme_layer extends qa_html_theme_base
 
 	public function post_meta_who($post, $class)
 	{
-		if (@$post['who'] && @$post['who']['data'] && qa_opt('badge_active') && (bool)qa_opt('badge_admin_user_widget') && ($class != 'qa-q-item' || qa_opt('badge_admin_user_widget_q_item')) )
+		if (@$post['who'] && @$post['who']['data'] && qa_opt('badge_active') && (bool)qa_opt('badge_admin_user_widget') && ($class != 'qa-q-item' || qa_opt('badge_admin_user_widget_q_item')))
 		{
-			$handle = preg_replace('|.+qa-user-link" title="@([^"]+)".+|','$1',$post['who']['data']);
+			$handle = preg_replace('|.+qa-user-link" title="@([^"]+)".+|', '$1', $post['who']['data']);
 			$post['who']['suffix'] = (@$post['who']['suffix']).'&nbsp;'.qa_badge_plugin_user_widget($handle);
 		}
 		
@@ -211,7 +211,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 	{
 		if (qa_opt('badge_active') && (bool)qa_opt('badge_admin_loggedin_widget') && @$this->content['loggedin']['data'] != null)
 		{
-			$handle = preg_replace('|.+qa-user-link" title="@([^"]+)".+|','$1',$this->content['loggedin']['data']);
+			$handle = preg_replace('|.+qa-user-link" title="@([^"]+)".+|', '$1', $this->content['loggedin']['data']);
 			$this->content['loggedin']['data'] = $this->content['loggedin']['data'].'&nbsp;'.qa_badge_plugin_user_widget($handle);
 		}
 		qa_html_theme_base::logged_in();
@@ -237,7 +237,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 			
 			$badges = array('notable_question','popular_question','famous_question');
 
-			qa_badge_award_check($badges, $views, $uid, $oid,2);
+			qa_badge_award_check($badges, $views, $uid, $oid, 2);
 
 		
 			// personal view count increase and badge check
@@ -255,11 +255,11 @@ class qa_html_theme_layer extends qa_html_theme_base
 					$uid
 				),
 				true
-			);		
+			);
 					
 			$badges = array('reader','avid_reader','devoted_reader');
 
-			qa_badge_award_check($badges, $views, $uid,null,2);
+			qa_badge_award_check($badges, $views, $uid,null, 2);
 		
 		}
 	}
@@ -294,7 +294,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 				'id INT(11) NOT NULL AUTO_INCREMENT,'.
 				'PRIMARY KEY (id)'.
 			') ENGINE=MyISAM DEFAULT CHARSET=utf8'
-		);			
+		);
 		
 		$result = qa_db_read_all_values(
 			qa_db_query_sub(
@@ -310,19 +310,19 @@ class qa_html_theme_layer extends qa_html_theme_base
 			{
 				$slug = $result[0];
 				$badge_name=qa_lang('badges/'.$slug);
-				if(!qa_opt('badge_'.$slug.'_name')) qa_opt('badge_'.$slug.'_name',$badge_name);
+				if(!qa_opt('badge_'.$slug.'_name')) qa_opt('badge_'.$slug.'_name', $badge_name);
 				$name = qa_opt('badge_'.$slug.'_name');
 				
-				$notice .= '<div class="badge-notify notify">'.qa_lang('badges/badge_notify')."'".$name.'\'&nbsp;&nbsp;'.qa_lang('badges/badge_notify_profile_pre').'<a href="'.qa_path_html((QA_FINAL_EXTERNAL_USERS?qa_path_to_root():'').'user/'.qa_get_logged_in_handle(),array('tab'=>'badges'),qa_opt('site_url')).'">'.qa_lang('badges/badge_notify_profile').'</a><div class="notify-close" onclick="jQuery(this).parent().slideUp(\'slow\')">x</div></div>';
+				$notice .= '<div class="badge-notify notify">'.qa_lang('badges/badge_notify')."'".$name.'\'&nbsp;&nbsp;'.qa_lang('badges/badge_notify_profile_pre').'<a href="'.qa_path_html((QA_FINAL_EXTERNAL_USERS?qa_path_to_root():'').'user/'.qa_get_logged_in_handle(), array('tab'=>'badges'), qa_opt('site_url')).'">'.qa_lang('badges/badge_notify_profile').'</a><div class="notify-close" onclick="jQuery(this).parent().slideUp(\'slow\')">x</div></div>';
 			}
 			else
 			{
 				$number_text = count($result)>2?str_replace('#', count($result)-1, qa_lang('badges/badge_notify_multi_plural')):qa_lang('badges/badge_notify_multi_singular');
 				$slug = $result[0];
 				$badge_name=qa_lang('badges/'.$slug);
-				if(!qa_opt('badge_'.$slug.'_name')) qa_opt('badge_'.$slug.'_name',$badge_name);
+				if(!qa_opt('badge_'.$slug.'_name')) qa_opt('badge_'.$slug.'_name', $badge_name);
 				$name = qa_opt('badge_'.$slug.'_name');
-				$notice .= '<div class="badge-notify notify">'.qa_lang('badges/badge_notify')."'".$name.'\'&nbsp;'.$number_text.'&nbsp;&nbsp;'.qa_lang('badges/badge_notify_profile_pre').'<a href="'.qa_path_html('user/'.qa_get_logged_in_handle(),array('tab'=>'badges'),qa_opt('site_url')).'">'.qa_lang('badges/badge_notify_profile').'</a><div class="notify-close" onclick="jQuery(this).parent().slideUp(\'slow\')">x</div></div>';
+				$notice .= '<div class="badge-notify notify">'.qa_lang('badges/badge_notify')."'".$name.'\'&nbsp;'.$number_text.'&nbsp;&nbsp;'.qa_lang('badges/badge_notify_profile_pre').'<a href="'.qa_path_html('user/'.qa_get_logged_in_handle(), array('tab'=>'badges'), qa_opt('site_url')).'">'.qa_lang('badges/badge_notify_profile').'</a><div class="notify-close" onclick="jQuery(this).parent().slideUp(\'slow\')">x</div></div>';
 			}
 
 			$notice .= '</div>';
@@ -346,7 +346,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 	
 	public function priviledge_notify() 
 	{ // gained priviledge
-	
+		return true;
 	}
 
 	public function getuserfromhandle($handle)
@@ -357,7 +357,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 		{
 			$publictouserid=qa_get_userids_from_public(array($handle));
 			$userid=@$publictouserid[$handle];
-		} 
+		}
 		else
 		{
 			$userid = qa_db_read_one_value(
@@ -376,7 +376,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 	{
 		preg_match( '#user/([^/]+)#', $this->request, $matches );
 		return !empty($matches[1]) ? $matches[1] : null;
-	}		
+	}
 }
 
 /*

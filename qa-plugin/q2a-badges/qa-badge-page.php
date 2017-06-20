@@ -2,8 +2,8 @@
 
 class qa_badge_page
 {
-	var $directory;
-	var $urltoroot;
+	private $directory;
+	private $urltoroot;
 	
 	public function load_module($directory, $urltoroot)
 	{
@@ -13,7 +13,7 @@ class qa_badge_page
 	
 	// for display in admin interface
 	public function suggest_requests()
-	{	
+	{
 		return array(
 			array(
 				'title' => qa_lang('badges/badges'),
@@ -71,7 +71,7 @@ class qa_badge_page
 			if(!qa_opt('badge_'.$slug.'_name')) qa_opt('badge_'.$slug.'_name', $badge_name);
 			$name = qa_opt('badge_'.$slug.'_name');
 			$var = qa_opt('badge_'.$slug.'_var');
-			$desc = qa_badge_desc_replace($slug,$var,false);
+			$desc = qa_badge_desc_replace($slug, $var, false);
 			$type = qa_get_badge_type($info['type']);
 			$types = $type['slug'];
 			$typen = $type['name'];
