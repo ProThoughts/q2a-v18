@@ -11,7 +11,8 @@ class qa_badge_page
 		$this->urltoroot=$urltoroot;
 	}
 	
-	public function suggest_requests() // for display in admin interface
+	// for display in admin interface
+	public function suggest_requests()
 	{	
 		return array(
 			array(
@@ -67,13 +68,13 @@ class qa_badge_page
 		{
 			if(qa_opt('badge_'.$slug.'_enabled') == '0') continue;
 			$badge_name = qa_badge_name($slug);
-			if(!qa_opt('badge_'.$slug.'_name')) qa_opt('badge_'.$slug.'_name',$badge_name);
+			if(!qa_opt('badge_'.$slug.'_name')) qa_opt('badge_'.$slug.'_name', $badge_name);
 			$name = qa_opt('badge_'.$slug.'_name');
 			$var = qa_opt('badge_'.$slug.'_var');
 			$desc = qa_badge_desc_replace($slug,$var,false);
 			$type = qa_get_badge_type($info['type']);
-			$types = $type['slug']; 
-			$typen = $type['name']; 
+			$types = $type['slug'];
+			$typen = $type['name'];
 			$qa_content['custom'.++$c]='<tr><td class="badge-entry"><div class="badge-entry-badge"><span class="badge-'.$types.'" title="'.$typen.'">'.$name.'</span>&nbsp;<span class="badge-entry-desc">'.$desc.'</span>'.(isset($count[$slug])?'&nbsp;<span title="'.$count[$slug]['count'].' '.qa_lang('badges/awarded').'" class="badge-count-link" onclick="jQuery(\'#badge-users-'.$slug.'\').slideToggle()">x'.$count[$slug]['count'].'</span>':'').'</div>';
 			
 			// source users
@@ -93,7 +94,7 @@ class qa_badge_page
 					{
 						$handles=qa_get_public_from_userids(array($uid));
 						$handle=@$handles[$uid];
-					} 
+					}
 					else
 					{
 						$useraccount=qa_db_select_with_pending(
@@ -106,7 +107,7 @@ class qa_badge_page
 					
 					$users[] = '<a href="'.qa_path_html('user/'.$handle).'">'.$handle.($ucount>1?' x'.$ucount:'').'</a>';
 				}
-				$qa_content['custom'.$c] .= implode(', ',$users).'</div>';
+				$qa_content['custom'.$c] .= implode(', ', $users).'</div>';
 			}
 			$qa_content['custom'.$c] .= '</td></tr>';
 		}
@@ -123,11 +124,11 @@ class qa_badge_page
 	{
 		require_once QA_INCLUDE_DIR.'qa-app-users.php';
 		
-		if (QA_FINAL_EXTERNAL_USERS) {
+		if (QA_FINAL_EXTERNAL_USERS)
+		{
 			$publictouserid=qa_get_userids_from_public(array($handle));
 			$userid=@$publictouserid[$handle];
-			
-		} 
+		}
 		else
 		{
 			$userid = qa_db_read_one_value(

@@ -3,7 +3,7 @@
 class qa_html_theme_layer extends qa_html_theme_base
 {
 	// init before start
-	public function doctype() 
+	public function doctype()
 	{
 		qa_html_theme_base::doctype();
 		if (qa_opt('badge_active'))
@@ -15,12 +15,12 @@ class qa_html_theme_layer extends qa_html_theme_base
 				{
 					$this->content['navigation']['sub'] = array(
 						'profile' => array(
-							'url' => qa_path_html('user/'.$this->_user_handle(), null, qa_opt('site_url')),
-							'label' => $this->_user_handle(),
+							'url' => qa_path_html('user/'.$this->user_handle(), null, qa_opt('site_url')),
+							'label' => $this->user_handle(),
 							'selected' => !qa_get('tab')?true:false
 						),
 						'badges' => array(
-							'url' => qa_path_html('user/'.$this->_user_handle(), array('tab'=>'badges'), qa_opt('site_url')),
+							'url' => qa_path_html('user/'.$this->user_handle(), array('tab'=>'badges'), qa_opt('site_url')),
 							'label' => qa_lang('badges/badges'),
 							'selected' => qa_get('tab')=='badges'?true:false
 						),
@@ -29,7 +29,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 				else
 				{
 					$this->content['navigation']['sub']['badges'] = array(
-						'url' => qa_path_html('user/'.$this->_user_handle(), array('tab'=>'badges'), qa_opt('site_url')),
+						'url' => qa_path_html('user/'.$this->user_handle(), array('tab'=>'badges'), qa_opt('site_url')),
 						'label' => qa_lang('badges/badges'),
 						'selected' => qa_get('tab')=='badges'?true:false
 					);
@@ -46,8 +46,8 @@ class qa_html_theme_layer extends qa_html_theme_base
 			
 			$user = @qa_db_read_one_assoc(
 				qa_db_query_sub(
-					'SELECT ^achievements.user_id AS uid,^achievements.oldest_consec_visit AS ocv,^achievements.longest_consec_visit AS lcv,^achievements.total_days_visited AS tdv,^achievements.last_visit AS lv,^achievements.first_visit AS fv, ^userpoints.points as points FROM ^achievements, ^userpoints WHERE ^achievements.user_id=# AND ^userpoints.userid=#',
-					$userid,$userid
+					'SELECT ^achievements.user_id AS uid,^achievements.oldest_consec_visit AS ocv,^achievements.longest_consec_visit AS lcv,^achievements.total_days_visited AS tdv,^achievements.last_visit AS lv,^achievements.first_visit AS fv, ^userpoints.points as points FROM ^achievements, ^userpoints WHERE ^achievements.user_id=# AND ^userpoints.userid=#', 
+					$userid, $userid
 				),
 				true
 			);
@@ -55,7 +55,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 			if(!$user['uid'])
 			{
 				qa_db_query_sub(
-					'INSERT INTO ^achievements (user_id, first_visit, oldest_consec_visit, longest_consec_visit, last_visit, total_days_visited, questions_read, posts_edited) VALUES (#, NOW(), NOW(), #, NOW(), #, #, #) ON DUPLICATE KEY UPDATE first_visit=NOW(), oldest_consec_visit=NOW(), longest_consec_visit=#, last_visit=NOW(), total_days_visited=#, questions_read=#, posts_edited=#',
+					'INSERT INTO ^achievements (user_id, first_visit, oldest_consec_visit, longest_consec_visit, last_visit, total_days_visited, questions_read, posts_edited) VALUES (#, NOW(), NOW(), #, NOW(), #, #, #) ON DUPLICATE KEY UPDATE first_visit=NOW(), oldest_consec_visit=NOW(), longest_consec_visit=#, last_visit=NOW(), total_days_visited=#, questions_read=#, posts_edited=#', 
 					$userid, 1, 1, 0, 0, 1, 1, 0, 0
 				);
 				return;
@@ -64,18 +64,18 @@ class qa_html_theme_layer extends qa_html_theme_base
 			// check lapse in days since last visit
 			// using julian days
 			
-			$todayj = GregorianToJD(date('n'),date('j'),date('Y'));
+			$todayj = GregorianToJD(date('n'), date('j'), date('Y'));
 			
 			$last_visit = strtotime($user['lv']);
-			$lastj = GregorianToJD(date('n',$last_visit),date('j',$last_visit),date('Y',$last_visit));
+			$lastj = GregorianToJD(date('n', $last_visit), date('j', $last_visit), date('Y', $last_visit));
 			$last_diff = $todayj-$lastj;
 			
 			$oldest_consec = strtotime($user['ocv']);
-			$oldest_consecj = GregorianToJD(date('n',$oldest_consec),date('j',$oldest_consec),date('Y',$oldest_consec));
+			$oldest_consecj = GregorianToJD(date('n', $oldest_consec), date('j', $oldest_consec), date('Y', $oldest_consec));
 			$oldest_consec_diff = $todayj-$oldest_consecj+1; // include the first day
 			
 			$first_visit = strtotime($user['fv']);
-			$first_visitj = GregorianToJD(date('n',$first_visit),date('j',$first_visit),date('Y',$first_visit));
+			$first_visitj = GregorianToJD(date('n', $first_visit), date('j', $first_visit), date('Y', $first_visit));
 			$first_visit_diff = $todayj-$first_visitj;
 			
 			if($last_diff < 0) return; // error
@@ -87,16 +87,16 @@ class qa_html_theme_layer extends qa_html_theme_base
 				{
 					$user['lcv'] = $oldest_consec_diff;
 					qa_db_query_sub(
-						'UPDATE ^achievements SET last_visit=NOW(), longest_consec_visit=#, total_days_visited=total_days_visited+#  WHERE user_id=#',
-						$oldest_consec_diff, $last_diff, $userid 
-					);		
+						'UPDATE ^achievements SET last_visit=NOW(), longest_consec_visit=#, total_days_visited=total_days_visited+#  WHERE user_id=#', 
+						$oldest_consec_diff, $last_diff, $userid
+					);
 				}
 				else
 				{
 					qa_db_query_sub(
-						'UPDATE ^achievements SET last_visit=NOW(), total_days_visited=total_days_visited+# WHERE user_id=#',
-						$last_diff,$userid 
-					);		
+						'UPDATE ^achievements SET last_visit=NOW(), total_days_visited=total_days_visited+# WHERE user_id=#', 
+						$last_diff, $userid
+					);
 				}
 				$badges = array('dedicated','devoted','zealous');
 				qa_badge_award_check($badges, $user['lcv'], $userid,null,2);
@@ -119,7 +119,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 			if(isset($user['points']))
 			{
 				$badges = array('100_club','1000_club','10000_club');
-				qa_badge_award_check($badges, $user['points'], $userid,null,2);	
+				qa_badge_award_check($badges, $user['points'], $userid, null, 2);
 			}
 		}
 	}
@@ -152,14 +152,14 @@ class qa_html_theme_layer extends qa_html_theme_base
 				}
 			</script>");
 		}
-		else if (isset($this->badge_notice))
+		elseif (isset($this->badge_notice))
 		{
 			$this->output("
 			<script>".(qa_opt('badge_notify_time') != '0'?"
 				jQuery('document').ready(function() { jQuery('.notify-container').delay(".((int)qa_opt('badge_notify_time')*1000).").slideUp('fast'); });":"")."
 			</script>");
 		}
-		$this->output('<style>',qa_opt('badges_css'),'</style>');
+		$this->output('<style>', qa_opt('badges_css'), '</style>');
 	}
 
 	public function body_prefix()
@@ -174,9 +174,10 @@ class qa_html_theme_layer extends qa_html_theme_base
 		qa_html_theme_base::body_suffix();
 		
 		if (qa_opt('badge_active')) {
-			if(isset($this->content['test-notify'])) {
+			if(isset($this->content['test-notify']))
+			{
 				$this->trigger_notify('Badge Tester');
-			 }
+			}
 		}
 	}
 
@@ -193,7 +194,6 @@ class qa_html_theme_layer extends qa_html_theme_base
 		}
 
 		qa_html_theme_base::main_parts($content);
-
 	}
 
 	public function post_meta_who($post, $class)
@@ -353,10 +353,10 @@ class qa_html_theme_layer extends qa_html_theme_base
 	{
 		require_once QA_INCLUDE_DIR.'qa-app-users.php';
 		
-		if (QA_FINAL_EXTERNAL_USERS) {
+		if (QA_FINAL_EXTERNAL_USERS)
+		{
 			$publictouserid=qa_get_userids_from_public(array($handle));
 			$userid=@$publictouserid[$handle];
-			
 		} 
 		else
 		{
@@ -372,7 +372,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 		return $userid;
 	}
 	// grab the handle of the profile you're looking at
-	public function _user_handle()
+	public function user_handle()
 	{
 		preg_match( '#user/([^/]+)#', $this->request, $matches );
 		return !empty($matches[1]) ? $matches[1] : null;
