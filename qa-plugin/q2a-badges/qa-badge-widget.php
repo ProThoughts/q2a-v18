@@ -57,7 +57,7 @@ class qa_badge_widget
 			$themeobject->output('<div class="badge-widget-entry" style="padding-top:8px;">', $string, '</div>');
 		}
 	}
-};
+}
 
 /*
 	Omit PHP closing tag to help avoid accidental output
