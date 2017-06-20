@@ -142,7 +142,7 @@ public function qa_get_badge_list()
 			$module=qa_load_module($moduletype, $modulename);
 			
 			if (method_exists($module, 'custom_badges'))
-				$badges=array_merge($badges,$module->custom_badges());
+				$badges=array_merge($badges, $module->custom_badges());
 		}
 	}
 
@@ -284,7 +284,7 @@ public function qa_badge_notification($uid, $oid, $badge_slug)
 				qa_db_query_sub(
 					'SELECT * FROM ^posts WHERE postid=#',
 					$post['parentid']
-				),
+				), 
 				true
 			);
 		}
@@ -367,7 +367,7 @@ public function qa_badge_desc_replace($slug, $var = null, $admin = false)
 	// var replace
 	if($var)
 	{
-		$desc = $admin?str_replace('#','<input type="text" name="badge_'.$slug.'_var" size="4" value="'.$var.'">', $desc):str_replace('#', $var, $desc);
+		$desc = $admin?str_replace('#', '<input type="text" name="badge_'.$slug.'_var" size="4" value="'.$var.'">', $desc):str_replace('#', $var, $desc);
 		$desc = preg_replace('/\^([^^]+)\^(\S+)/', ($var == 1?"$1":"$2"), $desc);
 	}
 	
@@ -397,7 +397,7 @@ if(!function_exists('qa_getHandleFromId'))
 		{
 			$publictohandle=qa_get_public_from_userids(array($userid));
 			$handle=@$publictohandle[$userid];
-		} 
+		}
 		else
 		{
 			$user = qa_db_single_select(qa_db_user_account_selectspec($userid, true));
@@ -410,7 +410,7 @@ if(!function_exists('qa_getHandleFromId'))
 
 // worker functions
 // layout
-public function qa_badge_plugin_user_widget($handle) 
+public function qa_badge_plugin_user_widget($handle)
 {
 	
 	$userids = qa_handles_to_userids(array($handle));
@@ -429,7 +429,7 @@ public function qa_badge_plugin_user_widget($handle)
 	
 	$badges = qa_get_badge_list();
 	foreach($result as $slug) {
-		$bcount[$badges[$slug]['type']] = isset($bcount[$badges[$slug]['type']])?$bcount[$badges[$slug]['type']]+1:1; 
+		$bcount[$badges[$slug]['type']] = isset($bcount[$badges[$slug]['type']])?$bcount[$badges[$slug]['type']]+1:1;
 	}
 	$output='<span id="badge-medals-widget">';
 	for($x = 2; $x >= 0; $x--)
@@ -444,7 +444,7 @@ public function qa_badge_plugin_user_widget($handle)
 
 		$output.='<span class="badge-pointer badge-'.$types.'-medal" title="'.$count.' '.$typed.'">●</span><span class="badge-pointer badge-'.$types.'-count" title="'.$count.' '.$typed.'"> '.$count.'</span> ';
 	}
-	$output = substr($output,0,-1);  // lazy remove space
+	$output = substr($output, 0, -1); // lazy remove space
 	$output.='</span>';
 	return($output);
 }
@@ -493,7 +493,7 @@ public function qa_badge_plugin_user_form($userid)
 							<td class="qa-form-wide-label">
 								<h3 class="badge-title" title="'.qa_lang('badges/'.$types.'_desc').'">'.$typed.'</h3>
 							</td>
-						</tr>';	
+						</tr>';
 			foreach($badge as $slug => $info)
 			{
 				$badge_name=qa_badge_name($slug);
@@ -511,7 +511,7 @@ public function qa_badge_plugin_user_form($userid)
 					$oids = null;
 				}
 				$var = qa_opt('badge_'.$slug.'_var');
-				$desc = qa_badge_desc_replace($slug,$var,false);
+				$desc = qa_badge_desc_replace($slug, $var, false);
 				
 				// badge row
 				
@@ -521,8 +521,8 @@ public function qa_badge_plugin_user_form($userid)
 								<div class="badge-container-badge">
 									<span class="badge-'.$types.'" title="'.$desc.' ('.$typed.')">'.qa_html($name).'</span>&nbsp;<span onclick="jQuery(\'.badge-container-sources-'.$slug.'\').slideToggle()" class="badge-count'.(is_array($oids)?' badge-count-link" title="'.qa_lang('badges/badge_count_click'):'').'">x&nbsp;'.$count.'</span>
 								</div>';
-				
-				// source row(s) if any	
+
+				// source row(s) if any
 				if(is_array($oids))
 				{
 					$output .= '
@@ -531,14 +531,14 @@ public function qa_badge_plugin_user_form($userid)
 					{
 						$post = qa_db_select_with_pending(
 							qa_db_full_post_selectspec(null, $oid)
-						);								
+						);
 						$title=$post['title'];
 						
 						$anchor = '';
 						
 						if($post['parentid'])
 						{
-							$anchor = urlencode(qa_anchor($post['type'],$oid));
+							$anchor = urlencode(qa_anchor($post['type'], $oid));
 							$oid = $post['parentid'];
 							$title = qa_db_read_one_value(
 								qa_db_query_sub(
@@ -546,15 +546,15 @@ public function qa_badge_plugin_user_form($userid)
 									$oid
 								),
 								true
-							);	
+							);
 						}
 						
 						$length = 30;
 						
-						$text = (qa_strlen($title) > $length ? qa_substr($title,0,$length).'...' : $title);
+						$text = (qa_strlen($title) > $length ? qa_substr($title, 0, $length).'...' : $title);
 						
 						$output .= '
-									<div class="badge-source"><a href="'.qa_path_html(qa_q_request($oid,$title),NULL,qa_opt('site_url')).($anchor?'#'.$anchor:'').'">'.qa_html($text).'</a></div>';
+									<div class="badge-source"><a href="'.qa_path_html(qa_q_request($oid,$title), null, qa_opt('site_url')).($anchor?'#'.$anchor:'').'">'.qa_html($text).'</a></div>';
 					}
 					$output .= '</div>';
 				}
@@ -569,7 +569,7 @@ public function qa_badge_plugin_user_form($userid)
 		}
 
 		$fields[] = array(
-				'value' => '<table class="badge-user-tables"><tr><td class="badge-user-table">'.implode('</td><td class="badge-user-table">',$outa).'</td></tr></table>',
+				'value' => '<table class="badge-user-tables"><tr><td class="badge-user-table">'.implode('</td><td class="badge-user-table">', $outa).'</td></tr></table>', 
 				'type' => 'static',
 		);
 	}
@@ -578,7 +578,7 @@ public function qa_badge_plugin_user_form($userid)
 	$tags = null;
 	$buttons = array();
 	
-	if((bool)qa_opt('badge_email_notify') && qa_get_logged_in_handle() == $handle) 
+	if((bool)qa_opt('badge_email_notify') && qa_get_logged_in_handle() == $handle)
 	{
 		// add badge notify checkbox
 		if(qa_clicked('badge_email_notify_save'))

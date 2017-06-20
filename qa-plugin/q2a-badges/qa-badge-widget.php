@@ -23,7 +23,7 @@ class qa_badge_widget
 		
 		$first = true;
 		
-		while (($badge=qa_db_read_one_assoc($badges,true)) !== null)
+		while (($badge=qa_db_read_one_assoc($badges, true)) !== null)
 		{
 			$params = array();
 			

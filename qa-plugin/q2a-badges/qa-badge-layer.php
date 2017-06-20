@@ -99,14 +99,14 @@ class qa_html_theme_layer extends qa_html_theme_base
 					);
 				}
 				$badges = array('dedicated','devoted','zealous');
-				qa_badge_award_check($badges, $user['lcv'], $userid,null, 2);
+				qa_badge_award_check($badges, $user['lcv'], $userid, null, 2);
 			}
 			else
 			{ // 2+ days, reset consecutive days due to lapse
 				qa_db_query_sub(
 					'UPDATE ^achievements SET last_visit=NOW(), oldest_consec_visit=NOW(), total_days_visited=total_days_visited+1 WHERE user_id=#',
 					$userid
-				);		
+				);	
 			}
 
 			$badges = array('visitor','trouper','veteran');
@@ -344,7 +344,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 		$this->output($notice);
 	}
 	
-	public function priviledge_notify() 
+	public function priviledge_notify()
 	{ // gained priviledge
 		return true;
 	}
