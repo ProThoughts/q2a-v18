@@ -1,6 +1,6 @@
 <?php
-	return array(
 
+	return array(
 		
 		'nice_question'=>'Nice Question',
 		'good_question'=>'Good Question',
@@ -17,7 +17,6 @@
 		'nice_answer_old'=>'Renewal',
 		'good_answer_old'=>'Revival',
 		'great_answer_old'=>'Resurrection',
-
 
 		'gifted'=>'Gifted',
 		'wise'=>'Wise',
@@ -171,7 +170,6 @@
 		'profiler_desc'=>'Filled out all profile fields',
 		'avatar_desc'=>'Uploaded an avatar image',
 
-
 		
 		'bronze'=>'Bronze',
 		'silver'=>'Silver',
@@ -247,9 +245,7 @@
 		'save_settings'=>'Save',
 		'save_settings_desc'=>'save above settings'
 	);
-	
 
 /*
 	Omit PHP closing tag to help avoid accidental output
 */
-

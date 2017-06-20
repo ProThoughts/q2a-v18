@@ -622,7 +622,6 @@ class badge_check
 	public function priviledge_notify($object_id, $user_id, $badge_slug)
 	{
 	
-
 	}
 
 	public function get_post_data($id)
