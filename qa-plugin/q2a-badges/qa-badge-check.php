@@ -6,35 +6,35 @@ class badge_check
 	public function process_event($event, $userid, $handle, $cookieid, $params)
 	{
 		if (qa_opt('badge_active')) {
-			switch ($event) 
+			switch ($event)
 			{
 				// when a new question, answer or comment is created. The $params array contains full information about the new post, including its ID in $params['postid'] and textual content in $params['text'].
 				case 'q_post':
-					$this->question_post($event,$userid,$params);
+					$this->question_post($event, $userid, $params);
 					break;
 				case 'a_post':
-					$this->answer_post($event,$userid,$params);
+					$this->answer_post($event, $userid, $params);
 					break;
 				case 'c_post':
-					$this->comment_post($event,$userid,$params);
+					$this->comment_post($event, $userid, $params);
 					break;
 
 				// when a question, answer or comment is modified. The $params array contains information about the post both before and after the change, e.g. $params['content'] and $params['oldcontent'].
 				case 'q_edit':
-					$this->question_edit($event,$userid,$params);
+					$this->question_edit($event, $userid, $params);
 					break;
 				case 'a_edit':
-					$this->answer_edit($event,$userid,$params);
+					$this->answer_edit($event, $userid, $params);
 					break;
 				case 'c_edit':
-					$this->comment_edit($event,$userid,$params);
+					$this->comment_edit($event, $userid, $params);
 					break;
 
 				// when an answer is selected or unselected as the best answer for its question. The IDs of the answer and its parent question are in $params['postid'] and $params['parentid'] respectively.
 				case 'a_select':
-					$this->answer_select($event,$userid,$params);
+					$this->answer_select($event, $userid, $params);
 					break;
-				case'a_unselect':
+				case 'a_unselect':
 					break;
 
 				// when a question, answer or comment is hidden or shown again after being hidden. The ID of the question, answer or comment is in $params['postid'].
@@ -42,7 +42,7 @@ class badge_check
 				case 'a_hide':
 				case 'c_hide':
 				case 'q_reshow':
-				case 'a_reshow': 
+				case 'a_reshow':
 				case 'c_reshow':
 					break;
 
@@ -68,19 +68,19 @@ class badge_check
 
 				// when a question or answer is upvoted, downvoted or unvoted by a user. The ID of the post is in $params['postid'].
 				case 'q_vote_up':
-					$this->question_vote_up($event,$userid,$params);
+					$this->question_vote_up($event, $userid, $params);
 					break;
 				case 'a_vote_up':
-					$this->answer_vote_up($event,$userid,$params);
+					$this->answer_vote_up($event, $userid, $params);
 					break;
 				case 'q_vote_down':
-					$this->question_vote_down($event,$userid,$params);
+					$this->question_vote_down($event, $userid, $params);
 					break;
 				case 'a_vote_down':
-					$this->answer_vote_down($event,$userid,$params);
+					$this->answer_vote_down($event, $userid, $params);
 					break;
 				case 'c_vote_up':
-					$this->comment_vote_up($event,$userid,$params);
+					$this->comment_vote_up($event, $userid, $params);
 					break;
 				case 'c_vote_down':
 					$this->check_voter($userid);
@@ -90,13 +90,13 @@ class badge_check
 					break;
 				// when a question, answer or comment is flagged or unflagged. The ID of the question, answer or comment is in $params['postid'].
 				case 'q_flag':
-					$this->question_flag($event,$userid,$params);
+					$this->question_flag($event, $userid, $params);
 					break;
 				case 'a_flag':
-					$this->answer_flag($event,$userid,$params);
+					$this->answer_flag($event, $userid, $params);
 					break;
 				case 'c_flag':
-					$this->comment_flag($event,$userid,$params);
+					$this->comment_flag($event, $userid, $params);
 					break;
 				case 'q_unflag':
 					break;
@@ -110,13 +110,13 @@ class badge_check
 					break;
 
 				// when a user logs in or out of Q2A.
-				case 'u_login': 
+				case 'u_login':
 				case 'u_logout':
 					break;
 
 				// when a user successfully confirms their email address, given in $params['email'].
 				case 'u_confirmed':
-					$this->check_email_award($event,$userid,$params);
+					$this->check_email_award($event, $userid, $params);
 					break;
 
 				// when a user successfully resets their password, which was emailed to $params['email'].
@@ -126,7 +126,7 @@ class badge_check
 				// when a user saves (and has possibly changed) their Q2A account details.
 					// check for full details
 				case 'u_save':
-					$this->check_user_fields($userid,$params);
+					$this->check_user_fields($userid, $params);
 					break;
 
 				// when a user sets (and has possibly changed) their Q2A password.
@@ -161,32 +161,32 @@ class badge_check
 	// badge checking functions
 		
 	// check on post
-	public function question_post($event,$event_user,$params)
+	public function question_post($event, $event_user, $params)
 	{
 		$id = $params['postid'];
 
 		// asker check
-		if($event_user) $this->check_question_number($event_user,$id);
+		if($event_user) $this->check_question_number($event_user, $id);
 	}
 		
-	public function answer_post($event,$event_user,$params)
+	public function answer_post($event, $event_user, $params)
 	{
 		$id = $params['postid'];
 
 		// answerer check
-		if($event_user) $this->check_answer_number($event_user,$id);
+		if($event_user) $this->check_answer_number($event_user, $id);
 	}
 	
-	public function comment_post($event,$event_user,$params)
+	public function comment_post($event, $event_user, $params)
 	{
 		$id = $params['postid'];
 
 		// commenter check
-		if($event_user) $this->check_comment_number($event_user,$id);
+		if($event_user) $this->check_comment_number($event_user, $id);
 	}
 	
 	// count total posts
-	public function check_question_number($uid,$oid)
+	public function check_question_number($uid, $oid)
 	{
 		$posts = qa_db_read_all_values(
 			qa_db_query_sub(
@@ -197,10 +197,10 @@ class badge_check
 		
 		// sheer volume of posts
 		$badges = array('asker','questioner','inquisitor');
-		qa_badge_award_check($badges, count($posts), $uid);			
+		qa_badge_award_check($badges, count($posts), $uid);
 	}
 	
-	public function check_answer_number($uid,$oid)
+	public function check_answer_number($uid, $oid)
 	{
 		$posts = qa_db_read_all_values(
 			qa_db_query_sub(
@@ -211,10 +211,10 @@ class badge_check
 
 		// sheer volume of posts
 		$badges = array('answerer','lecturer','preacher');
-		qa_badge_award_check($badges, count($posts), $uid);		
+		qa_badge_award_check($badges, count($posts), $uid);
 	}
 	
-	public function check_comment_number($uid,$oid)
+	public function check_comment_number($uid, $oid)
 	{
 		$posts = qa_db_read_all_values(
 			qa_db_query_sub(
@@ -226,11 +226,11 @@ class badge_check
 		// sheer volume of posts
 		
 		$badges = array('commenter','commentator','annotator');
-		qa_badge_award_check($badges, count($posts), $uid);			
+		qa_badge_award_check($badges, count($posts), $uid);
 	}
 	
 	// check on votes
-	public function question_vote_up($event,$event_user,$params)
+	public function question_vote_up($event, $event_user, $params)
 	{
 		$oid = $params['postid'];
 		$post = $this->get_post_data($oid);
@@ -248,11 +248,11 @@ class badge_check
 		// post owner upvotes check
 
 		$badges = array('nice_question','good_question','great_question');
-		qa_badge_award_check($badges, $votes, $uid, $oid);		
+		qa_badge_award_check($badges, $votes, $uid, $oid);
 	}
 	
 	// check number of votes on answer
-	public function answer_vote_up($event,$event_user,$params)
+	public function answer_vote_up($event, $event_user, $params)
 	{
 		$oid = $params['postid'];
 		$post = $this->get_post_data($oid);
@@ -265,7 +265,7 @@ class badge_check
 		
 		// vote volume check
 		
-		if($event_user) $this->check_voter($event_user,$oid);
+		if($event_user) $this->check_voter($event_user, $oid);
 
 		// post owner upvotes check
 		
@@ -273,9 +273,9 @@ class badge_check
 		
 		$badges = array('nice_answer','good_answer','great_answer');
 
-		foreach($badges as $badge_slug) 
+		foreach($badges as $badge_slug)
 		{
-			if($votes  >= (int)qa_opt('badge_'.$badge_slug.'_var') && qa_opt('badge_'.$badge_slug.'_enabled') !== '0') 
+			if($votes  >= (int)qa_opt('badge_'.$badge_slug.'_var') && qa_opt('badge_'.$badge_slug.'_enabled') !== '0')
 			{
 				$result = qa_db_read_one_value(
 					qa_db_query_sub(
@@ -284,7 +284,7 @@ class badge_check
 					),
 					true
 				);
-				if ($result == null) 
+				if ($result == null)
 				{ // not already awarded for this answer
 					$this->award_badge($oid, $uid, $badge_slug);
 				}
@@ -303,7 +303,7 @@ class badge_check
 
 				$badge_slug2 = $badge_slug.'_old';
 				
-				if($diff  >= (int)qa_opt('badge_'.$badge_slug2.'_var') && qa_opt('badge_'.$badge_slug2.'_enabled') !== '0') 
+				if($diff  >= (int)qa_opt('badge_'.$badge_slug2.'_var') && qa_opt('badge_'.$badge_slug2.'_enabled') !== '0')
 				{
 					$result = qa_db_read_one_value(
 						qa_db_query_sub(
@@ -312,7 +312,7 @@ class badge_check
 						),
 						true
 					);
-					if ($result == null) 
+					if ($result == null)
 					{ // not already awarded for this answer
 						$this->award_badge($oid, $uid, $badge_slug2);
 					}
@@ -321,7 +321,7 @@ class badge_check
 		}
 	}
 
-	public function comment_vote_up($event,$event_user,$params)
+	public function comment_vote_up($event, $event_user, $params)
 	{
 		$oid = $params['postid'];
 		$post = $this->get_post_data($oid);
@@ -339,10 +339,10 @@ class badge_check
 		// post owner upvotes check
 
 		$badges = array('nice_comment','good_comment','great_comment');
-		qa_badge_award_check($badges, $votes, $uid, $oid);		
+		qa_badge_award_check($badges, $votes, $uid, $oid);
 	}
 
-	public function question_vote_down($event,$event_user,$params)
+	public function question_vote_down($event, $event_user, $params)
 	{
 		$id = $params['postid'];
 		
@@ -350,7 +350,7 @@ class badge_check
 		if($event_user) $this->check_voter($event_user);
 	}
 
-	public function answer_vote_down($event,$event_user,$params)
+	public function answer_vote_down($event, $event_user, $params)
 	{
 		$id = $params['postid'];
 		
@@ -389,14 +389,14 @@ class badge_check
 	}
 
 	// check on selected answer
-	public function answer_select($event,$uid,$params)
+	public function answer_select($event, $uid, $params)
 	{
 		$qid = $params['parentid'];
 		$aid = $params['postid'];
 		$a = $this->get_post_data($aid);
 		$auid = $a['userid'];
 		
-		if($auid) 
+		if($auid)
 		{
 			// sheer number of answerer's answers selected by others
 			$count = qa_db_read_one_value(
@@ -405,14 +405,14 @@ class badge_check
 					$auid
 				),
 				true
-			);			
+			);
 
 			$badges = array('gifted','wise','enlightened');
 
 			qa_badge_award_check($badges, $count, $auid);
 		}
 
-		if($uid) 
+		if($uid)
 		{
 			// sheer number of answers selected by selecter
 			$count = qa_db_read_one_value(
@@ -429,7 +429,7 @@ class badge_check
 	}
 	
 	// check on edit
-	public function question_edit($event,$event_user,$params)
+	public function question_edit($event, $event_user, $params)
 	{
 		if($params['content'] == $params['oldcontent']) return;
 		
@@ -439,7 +439,7 @@ class badge_check
 		if($event_user) $this->check_editor($event_user);
 	}
 
-	public function answer_edit($event,$event_user,$params)
+	public function answer_edit($event, $event_user, $params)
 	{
 		if($params['content'] == $params['oldcontent']) return;
 		
@@ -449,7 +449,7 @@ class badge_check
 		if($event_user) $this->check_editor($event_user);
 	}
 
-	public function comment_edit($event,$event_user,$params)
+	public function comment_edit($event, $event_user, $params)
 	{
 
 		if($params['content'] == $params['oldcontent']) return;
@@ -480,10 +480,10 @@ class badge_check
 
 		$badges = array('editor','copy_editor','senior_editor');
 		qa_badge_award_check($badges, $count, $uid);
-	}		
+	}
 
 	// check on flags
-	public function question_flag($event,$event_user,$params)
+	public function question_flag($event, $event_user, $params)
 	{
 		$id = $params['postid'];
 		
@@ -491,7 +491,7 @@ class badge_check
 		if($event_user) $this->check_flagger($event_user);
 	}
 
-	public function answer_flag($event,$event_user,$params)
+	public function answer_flag($event, $event_user, $params)
 	{
 		$id = $params['postid'];
 		
@@ -499,7 +499,7 @@ class badge_check
 		if($event_user) $this->check_flagger($event_user);
 	}
 
-	public function comment_flag($event,$event_user,$params)
+	public function comment_flag($event, $event_user, $params)
 	{
 		$id = $params['postid'];
 		
@@ -520,16 +520,16 @@ class badge_check
 
 		qa_badge_award_check($badges, count($flags), $uid);
 	}
-	
-	// verified email check for badge 
-	public function check_email_award($event,$event_user,$params)
+
+	// verified email check for badge
+	public function check_email_award($event, $event_user, $params)
 	{
 		$badges = array('verified');
 		qa_badge_award_check($badges, false, $event_user);
 	}
 	
 	// user field changes
-	public function check_user_fields($userid,$params)
+	public function check_user_fields($userid, $params)
 	{
 		list($useraccount, $userprofile, $userfields)=qa_db_select_with_pending(
 			qa_db_user_account_selectspec($userid, true),
@@ -541,7 +541,7 @@ class badge_check
 		
 		if (qa_opt('avatar_allow_upload') && isset($useraccount['avatarblobid'])) {
 			$badges = array('avatar');
-			qa_badge_award_check($badges, false, $userid);				
+			qa_badge_award_check($badges, false, $userid);
 		}
 		
 		// profile completion
@@ -556,11 +556,10 @@ class badge_check
 		
 		if(!$missing) {
 			$badges = array('profiler');
-			qa_badge_award_check($badges, false, $userid);			
+			qa_badge_award_check($badges, false, $userid);
 		}
-		
 	}
-
+	
 	// check on badges
 	public function check_badges($uid)
 	{
@@ -587,9 +586,8 @@ class badge_check
 					$this->award_badge(null, $uid, $badge_slug, true); // this is a "badge badge"
 				}
 			}
-		}			
+		}
 	}
-
 
 	// worker functions
 	public function award_badge($object_id, $user_id, $badge_slug, $badge_badge = false)
@@ -615,7 +613,7 @@ class badge_check
 			);
 		}
 		
-		if(qa_opt('badge_email_notify')) qa_badge_notification($user_id, $object_id, $badge_slug);	
+		if(qa_opt('badge_email_notify')) qa_badge_notification($user_id, $object_id, $badge_slug);
 		
 		// check for sheer number of badges, unless this badge was for number of badges (avoid recursion!)
 		if(!$badge_badge) $this->check_badges($user_id);
@@ -623,9 +621,9 @@ class badge_check
 
 	public function priviledge_notify($object_id, $user_id, $badge_slug)
 	{
-		
+
 	}
-	
+
 	public function get_post_data($id)
 	{
 		$result = qa_db_read_one_assoc(
