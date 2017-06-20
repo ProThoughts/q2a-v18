@@ -161,7 +161,7 @@ class qa_badge_admin
 		}
 	}
 
-	function admin_form(&$qa_content)
+	public function admin_form(&$qa_content)
 	{
 
 		//	Process form input
@@ -178,7 +178,7 @@ class qa_badge_admin
 
 			$ok = $this->qa_check_all_users_badges();
 		}
-		else if (qa_clicked('badge_reset_names'))
+		elseif (qa_clicked('badge_reset_names'))
 		{
 			foreach($badges as $slug => $info)
 			{
@@ -187,7 +187,7 @@ class qa_badge_admin
 
 			$ok = qa_lang('badges/badge_names_reset');
 		}
-		else if (qa_clicked('badge_reset_values'))
+		elseif (qa_clicked('badge_reset_values'))
 		{
 			foreach($badges as $slug => $info)
 			{
@@ -199,16 +199,16 @@ class qa_badge_admin
 
 			$ok = qa_lang('badges/badge_values_reset');
 		}
-		else if (qa_clicked('badge_trigger_notify'))
+		elseif (qa_clicked('badge_trigger_notify'))
 		{
 			$qa_content['test-notify'] = 1;
 		}
-		else if (qa_clicked('badge_reset_css'))
+		elseif (qa_clicked('badge_reset_css'))
 		{
 			qa_opt('badges_css', $this->option_default('badges_css'));
 			$ok = 'CSS Reset';
 		}
-		else if (qa_clicked('badge_save_settings'))
+		elseif (qa_clicked('badge_save_settings'))
 		{
 			qa_opt('badge_active', (bool)qa_post_text('badge_active_check'));
 			if (qa_opt('badge_active'))
@@ -217,19 +217,15 @@ class qa_badge_admin
 				qa_db_query_sub('CREATE TABLE IF NOT EXISTS ^achievements (' . 'user_id INT(11) UNIQUE NOT NULL,' . 'first_visit DATETIME,' . 'oldest_consec_visit DATETIME,' . 'longest_consec_visit INT(10),' . 'last_visit DATETIME,' . 'total_days_visited INT(10),' . 'questions_read INT(10),' . 'posts_edited INT(10)' . ') ENGINE=MyISAM DEFAULT CHARSET=utf8');
 
 				// set badge names, vars and states
-
 				foreach($badges as $slug => $info)
 				{
-
 					// update var
-
 					if (isset($info['var']) && qa_post_text('badge_' . $slug . '_var'))
 					{
 						qa_opt('badge_' . $slug . '_var', qa_post_text('badge_' . $slug . '_var'));
 					}
 
 					// toggle activation
-
 					if ((bool)qa_post_text('badge_' . $slug . '_enabled') === false)
 					{
 						qa_opt('badge_' . $slug . '_enabled', '0');
@@ -237,7 +233,6 @@ class qa_badge_admin
 					else qa_opt('badge_' . $slug . '_enabled', '1');
 
 					// set custom names
-
 					if (qa_post_text('badge_' . $slug . '_edit') != qa_opt('badge_' . $slug . '_name'))
 					{
 						qa_opt('badge_' . $slug . '_name', qa_post_text('badge_' . $slug . '_edit'));
@@ -246,7 +241,6 @@ class qa_badge_admin
 				}
 
 				// options
-
 				qa_opt('badge_notify_time', (int)qa_post_text('badge_notify_time'));
 				qa_opt('badge_show_users_badges', (bool)qa_post_text('badge_show_users_badges'));
 				qa_opt('badge_show_source_posts', (bool)qa_post_text('badge_show_source_posts'));
@@ -294,7 +288,7 @@ class qa_badge_admin
 				$badge_name = qa_badge_name($slug);
 				if (!qa_opt('badge_' . $slug . '_name')) qa_opt('badge_' . $slug . '_name', $badge_name);
 				$name = qa_opt('badge_' . $slug . '_name');
-				$badge_desc = qa_badge_desc_replace($slug, qa_opt('badge_' . $slug . '_var') , true);
+				$badge_desc = qa_badge_desc_replace($slug, qa_opt('badge_' . $slug . '_var'), true);
 				$type = qa_get_badge_type($info['type']);
 				$types = $type['slug'];
 				$fields[] = array(
@@ -478,7 +472,7 @@ class qa_badge_admin
 
 	public function get_post_data($id)
 	{
-		$result = qa_db_read_one_assoc(qa_db_query_sub('SELECT * FROM ^posts WHERE postid=#', $id) , true);
+		$result = qa_db_read_one_assoc(qa_db_query_sub('SELECT * FROM ^posts WHERE postid=#', $id), true);
 		return $result;
 	}
 
@@ -497,12 +491,10 @@ class qa_badge_admin
 			$pt = $post['type'];
 
 			// get post count
-
 			if (isset($users[$user]) && isset($users[$user][$pt])) $users[$user][$pt]++;
-			  else $users[$user][$pt] = 1;
+			else $users[$user][$pt] = 1;
 
 			// get post votes
-
 			if ($post['netvotes'] != 0) $users[$user][$pt . 'votes'][] = array(
 				'id' => $pid,
 				'votes' => (int)$post['netvotes'],
@@ -511,7 +503,6 @@ class qa_badge_admin
 			);
 
 			// get post views
-
 			if ($post['views']) $users[$user]['views'][] = array(
 				'id' => $pid,
 				'views' => $post['views']
@@ -545,7 +536,7 @@ class qa_badge_admin
 			// get flag count
 
 			if (isset($users[$user]) && isset($users[$user]['flags'])) $users[$user]['flags']++;
-			  else $users[$user]['flags'] = 1;
+			else $users[$user]['flags'] = 1;
 			unset($flag_result[$idx]);
 		}
 
@@ -611,9 +602,7 @@ class qa_badge_admin
 						if (!isset($data[$pt . 'votes'])) continue;
 						foreach($data[$pt . 'votes'] as $idv)
 						{
-
 							// poll plugin integration
-
 							if ($pt == 'A' && qa_opt('poll_enable'))
 							{
 								$poll = qa_db_read_one_value(qa_db_query_sub('SELECT meta_value FROM ^postmeta WHERE post_id=# AND meta_key=$', $idv['id'], 'is_poll') , true);
@@ -643,10 +632,10 @@ class qa_badge_admin
 									{
 										$result = qa_db_read_one_value(qa_db_query_sub('SELECT badge_slug FROM ^userbadges WHERE user_id=# AND object_id=# AND badge_slug=$', $uid, $idv['id'], $badge_slug2) , true);
 										if ($result == null)
-											{ // not already awarded for this answer
+										{ // not already awarded for this answer
 											$this->award_badge($idv['id'], $uid, $badge_slug2);
 											$awarded++;
-											}
+										}
 									}
 								}
 							}
@@ -791,12 +780,12 @@ class qa_badge_admin
 				// check lapse in days since last visit
 				// using julian days
 
-				$todayj = GregorianToJD(date('n') , date('j') , date('Y'));
+				$todayj = GregorianToJD(date('n'), date('j'), date('Y'));
 				$last_visit = strtotime($user['lv']);
-				$lastj = GregorianToJD(date('n', $last_visit) , date('j', $last_visit) , date('Y', $last_visit));
+				$lastj = GregorianToJD(date('n', $last_visit), date('j', $last_visit), date('Y', $last_visit));
 				$last_diff = $todayj - $lastj;
 				$first_visit = strtotime($user['fv']);
-				$first_visitj = GregorianToJD(date('n', $first_visit) , date('j', $first_visit) , date('Y', $first_visit));
+				$first_visitj = GregorianToJD(date('n', $first_visit), date('j', $first_visit), date('Y', $first_visit));
 				$first_visit_diff = $todayj - $first_visitj;
 				$badges = array(
 					'dedicated',
@@ -846,9 +835,7 @@ class qa_badge_admin
 
 		if (!QA_FINAL_EXTERNAL_USERS)
 		{
-
 			// verified
-
 			$badges = array(
 				'verified'
 			);
@@ -938,7 +925,7 @@ class qa_badge_admin
 
 				// get badge count
 				if (isset($users[$user]) && isset($users[$user]['medals'])) $users[$user]['medals']++;
-				  else $users[$user]['medals'] = 1;
+				else $users[$user]['medals'] = 1;
 				unset($badgelist[$idx]);
 			}
 			foreach($users as $user => $data)
@@ -954,8 +941,8 @@ class qa_badge_admin
 				}
 
 				unset($users[$user]);
-				}
 			}
+		}
 		// return ok text
 		return $awarded . ' badge' . ($awarded != 1 ? 's' : '') . ' awarded.';
 	}
@@ -967,7 +954,6 @@ class qa_badge_admin
 		{
 			if (qa_opt('badge_' . $slug . '_enabled') !== '0') $c++;
 		}
-
 		return $c;
 	}
 }
