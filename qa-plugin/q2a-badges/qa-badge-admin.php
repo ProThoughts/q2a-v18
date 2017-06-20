@@ -859,7 +859,7 @@ class qa_badge_admin
 				$userq = qa_db_query_sub('SELECT userid FROM ^users');
 				while (($userid = qa_db_read_one_value($userq, true)) !== null)
 				{
-					list($useraccount, $userprofile, $userfields) = qa_db_select_with_pending(qa_db_user_account_selectspec($userid, true), qa_db_user_profile_selectspec($userid, true) , qa_db_userfields_selectspec());
+					list($useraccount, $userprofile, $userfields) = qa_db_select_with_pending(qa_db_user_account_selectspec($userid, true), qa_db_user_profile_selectspec($userid, true), qa_db_userfields_selectspec());
 
 					// avatar badge
 
