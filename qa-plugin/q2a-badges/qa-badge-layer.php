@@ -106,7 +106,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 				qa_db_query_sub(
 					'UPDATE ^achievements SET last_visit=NOW(), oldest_consec_visit=NOW(), total_days_visited=total_days_visited+1 WHERE user_id=#',
 					$userid
-				);	
+				);
 			}
 
 			$badges = array('visitor','trouper','veteran');
@@ -259,7 +259,7 @@ class qa_html_theme_layer extends qa_html_theme_base
 					
 			$badges = array('reader','avid_reader','devoted_reader');
 
-			qa_badge_award_check($badges, $views, $uid,null, 2);
+			qa_badge_award_check($badges, $views, $uid, null, 2);
 		
 		}
 	}

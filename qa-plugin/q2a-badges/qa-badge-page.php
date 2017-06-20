@@ -142,8 +142,7 @@ class qa_badge_page
 		if (!isset($userid)) return;
 		return $userid;
 	}
-};
-
+}
 /*
 	Omit PHP closing tag to help avoid accidental output
 */

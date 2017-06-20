@@ -264,7 +264,7 @@ public function qa_badge_notification($uid, $oid, $badge_slug)
 	$subject = qa_opt('badge_email_subject');
 	$body = qa_opt('badge_email_body');
 
-	$body = preg_replace('/\^if_post_text="([^"]*)"/',($oid?'$1':''), $body); // if post text
+	$body = preg_replace('/\^if_post_text="([^"]*)"/', ($oid?'$1':''), $body); // if post text
 	
 	$site_url = qa_opt('site_url');
 	$profile_url = qa_path_html('user/'.$handle, null, $site_url);
@@ -284,7 +284,7 @@ public function qa_badge_notification($uid, $oid, $badge_slug)
 				qa_db_query_sub(
 					'SELECT * FROM ^posts WHERE postid=#',
 					$post['parentid']
-				), 
+				),
 				true
 			);
 		}
@@ -554,7 +554,7 @@ public function qa_badge_plugin_user_form($userid)
 						$text = (qa_strlen($title) > $length ? qa_substr($title, 0, $length).'...' : $title);
 						
 						$output .= '
-									<div class="badge-source"><a href="'.qa_path_html(qa_q_request($oid,$title), null, qa_opt('site_url')).($anchor?'#'.$anchor:'').'">'.qa_html($text).'</a></div>';
+									<div class="badge-source"><a href="'.qa_path_html(qa_q_request($oid, $title), null, qa_opt('site_url')).($anchor?'#'.$anchor:'').'">'.qa_html($text).'</a></div>';
 					}
 					$output .= '</div>';
 				}
@@ -569,7 +569,7 @@ public function qa_badge_plugin_user_form($userid)
 		}
 
 		$fields[] = array(
-				'value' => '<table class="badge-user-tables"><tr><td class="badge-user-table">'.implode('</td><td class="badge-user-table">', $outa).'</td></tr></table>', 
+				'value' => '<table class="badge-user-tables"><tr><td class="badge-user-table">'.implode('</td><td class="badge-user-table">', $outa).'</td></tr></table>',
 				'type' => 'static',
 		);
 	}
