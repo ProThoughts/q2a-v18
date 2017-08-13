@@ -498,12 +498,30 @@ function qa_post_html_fields($post, $userid, $cookieid, $usershtml, $dummy, $opt
 
 		if ($fields['hidden']) {
 			$fields['vote_state'] = 'disabled';
-			$fields['vote_up_tags'] = 'title="' . qa_lang_html($isanswer ? 'main/vote_disabled_hidden_a' : 'main/vote_disabled_hidden_q') . '"';
+			if ($isanswer){
+				$vote_disabled_message = qa_lang_html('main/vote_disabled_hidden_a');
+			}
+			elseif ($isquestion) {
+				$vote_disabled_message = qa_lang_html('main/vote_disabled_hidden_q');
+			}
+			else {
+				$vote_disabled_message = qa_lang_html('main/vote_disabled_hidden_c');
+			}
+			$fields['vote_up_tags'] = 'title="' . $vote_disabled_message . '"';
 			$fields['vote_down_tags'] = $fields['vote_up_tags'];
 
 		} elseif ($isbyuser) {
 			$fields['vote_state'] = 'disabled';
-			$fields['vote_up_tags'] = 'title="' . qa_lang_html($isanswer ? 'main/vote_disabled_my_a' : 'main/vote_disabled_my_q') . '"';
+			if ($isanswer){
+				$vote_disabled_message = qa_lang_html('main/vote_disabled_my_a');
+			}
+			elseif ($isquestion) {
+				$vote_disabled_message = qa_lang_html('main/vote_disabled_my_q');
+			}
+			else {
+				$vote_disabled_message = qa_lang_html('main/vote_disabled_my_c');
+			}
+			$fields['vote_up_tags'] = 'title="' . $vote_disabled_message . '"';			
 			$fields['vote_down_tags'] = $fields['vote_up_tags'];
 
 		} elseif (strpos($voteview, '-disabled-')) {
